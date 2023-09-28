@@ -1,9 +1,9 @@
-package com.example.lmxdemo.statemachine;
+package com.example.lmxdemo.statemachine.config;
 
 
-import com.example.lmxdemo.domain.Failure;
-import com.example.lmxdemo.enums.DrillEventEnum;
-import com.example.lmxdemo.enums.DrillStateEnum;
+import com.example.statemachinedemo.domain.Fault;
+import com.example.statemachinedemo.statemachine.enums.Event;
+import com.example.statemachinedemo.statemachine.enums.State;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.statemachine.annotation.OnTransition;
@@ -13,16 +13,16 @@ import java.util.Objects;
 
 @Configuration
 @WithStateMachine
-public class DrillStateMachineEventConfig { // 监听器
+public class EventConfig {
 
     @OnTransition(source = "READY", target = "DRILLING")
-    public boolean start(Message<DrillEventEnum> message) {
-        Failure failure = (Failure) message.getHeaders().get("failure");
-        if (Objects.isNull(failure)) {
+    public boolean start(Message<Event> message) {
+        Fault fault = (Fault) message.getHeaders().get("failure");
+        if (Objects.isNull(fault)) {
             System.out.println("[READY -> DRILLING]: obj is null");
             return false;
         }
-        failure.setState(DrillStateEnum.DRILLING.getValue());
+        fault.setState(State.DRILLING.getValue());
         System.out.println("READY -> DRILLING");
         return true;
     }
